@@ -1,8 +1,13 @@
+import { ThemeProvider } from '@material-ui/core';
+import customTheme from './theme/customTheme'
+
+const theme = customTheme
+
 function App() {
   return (
-    <div>
-      <p>Test</p>
-    </div>
+    <ThemeProvider theme={theme}>
+      
+    </ThemeProvider>
   );
 }
 
