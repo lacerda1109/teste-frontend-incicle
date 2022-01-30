@@ -20,6 +20,12 @@ import Badge from "./components/Badge";
 import { data } from "./assets/data/data";
 
 export default function AppBody() {
+    // SELECT -----------------------------------------------------------------------------------------------
+    const [selectValue, setSelectValue] = useState("");
+    function handleSelect(e) {
+        setSelectValue(e.target.value);
+    }
+
     // DELETE MENU ------------------------------------------------------------------------------------------
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
@@ -66,6 +72,93 @@ export default function AppBody() {
         return str;
     }
 
+    function card(el, i) {
+        return (
+            <Card key={i}>
+                <CardContent
+                    sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        padding: "16px !important",
+                    }}
+                >
+                    <Box
+                        sx={{
+                            display: "flex",
+                            gap: "16px",
+                        }}
+                    >
+                        <Box
+                            sx={{
+                                backgroundColor: "#ccc",
+                                width: "100px",
+                                height: "100px",
+                                backgroundImage: `url(${el.file.url})`,
+                                backgroundSize: "cover",
+                            }}
+                        ></Box>
+                        <Box>
+                            <Typography variant="h4">{el.title}</Typography>
+                            <Box>
+                                <Box
+                                    sx={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                    }}
+                                >
+                                    {badgeType(el.type)}
+                                    {el.info.place ? (
+                                        <Typography>
+                                            {el.info.place} |{" "}
+                                        </Typography>
+                                    ) : null}
+                                    <Typography>{el.info.date}</Typography>
+                                    {el.type === "event" ? (
+                                        <Typography>
+                                            {" "}
+                                            |{" "}
+                                            <Link sx={{ cursor: "pointer" }}>
+                                                {confirmations(
+                                                    el.invited_people
+                                                )}
+                                            </Link>
+                                        </Typography>
+                                    ) : null}
+                                </Box>
+                                <Typography mt={1}>{el.description}</Typography>
+                            </Box>
+                        </Box>
+                    </Box>
+                    {/* https://v5-0-6.mui.com/pt/components/menus/ - LINK PARA MENU */}
+                    <IconButton
+                        sx={{
+                            backgroundColor: "#dbdbdb",
+                        }}
+                        id="basic-button"
+                        aria-controls="basic-menu"
+                        aria-haspopup="true"
+                        aria-expanded={open ? "true" : undefined}
+                        onClick={handleClick}
+                    >
+                        <MoreHoriz sx={{ fill: "#707070" }} />
+                    </IconButton>
+                    <Menu
+                        id="basic-menu"
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={handleClose}
+                        MenuListProps={{
+                            "aria-labelledby": "basic-button",
+                        }}
+                    >
+                        <MenuItem onClick={handleClose}>Excluir</MenuItem>
+                    </Menu>
+                </CardContent>
+            </Card>
+        );
+    }
+
     return (
         <Box>
             <Container maxWidth="xl" sx={{ padding: "24px" }}>
@@ -95,15 +188,19 @@ export default function AppBody() {
                                     <Select
                                         label="Tipo"
                                         sx={{ backgroundColor: "white" }}
+                                        value={selectValue}
+                                        onChange={handleSelect}
                                     >
                                         <MenuItem value="">
                                             <em>Nenhum</em>
                                         </MenuItem>
-                                        <MenuItem value="com">
+                                        <MenuItem value="release">
                                             Comunicado
                                         </MenuItem>
-                                        <MenuItem value="eve">Evento</MenuItem>
-                                        <MenuItem value="pub">
+                                        <MenuItem value="event">
+                                            Evento
+                                        </MenuItem>
+                                        <MenuItem value="publication">
                                             Publicação
                                         </MenuItem>
                                     </Select>
@@ -113,7 +210,6 @@ export default function AppBody() {
                                 </Button>
                             </Box>
                         </Box>
-                        {/* MAP */}
                         <Box
                             mt={2}
                             sx={{
@@ -123,102 +219,13 @@ export default function AppBody() {
                             }}
                         >
                             {data.map((el, i) => {
-                                return (
-                                    <Card key={i}>
-                                        <CardContent
-                                            sx={{
-                                                display: "flex",
-                                                justifyContent: "space-between",
-                                                alignItems: "center",
-                                                padding: "16px !important",
-                                            }}
-                                        >
-                                            <Box
-                                                sx={{
-                                                    display: "flex",
-                                                    gap: "16px",
-                                                }}
-                                            >
-                                                <Box
-                                                    sx={{
-                                                        backgroundColor: "#ccc",
-                                                        width: "100px",
-                                                        height: "100px",
-                                                        backgroundImage: `url(${el.file.url})`,
-                                                        backgroundSize: "cover",
-                                                    }}
-                                                ></Box>
-                                                <Box>
-                                                    <Typography variant="h4">
-                                                        {el.title}
-                                                    </Typography>
-                                                    <Box>
-                                                        <Box
-                                                            sx={{
-                                                                display: "flex",
-                                                                alignItems: "center"
-                                                            }}
-                                                        >
-                                                            {badgeType(el.type)}
-                                                            {el.info.place ? (
-                                                                <Typography>{el.info.place} | </Typography>
-                                                            ) : null}
-                                                            <Typography>
-                                                                {el.info.date}
-                                                            </Typography>
-                                                            {el.type ===
-                                                            "event" ? (
-                                                                <Typography>
-                                                                    {" "}
-                                                                    |{" "}
-                                                                    <Link sx={{cursor: 'pointer'}}>
-                                                                        {confirmations(
-                                                                            el.invited_people
-                                                                        )}
-                                                                    </Link>
-                                                                </Typography>
-                                                            ) : null}
-                                                        </Box>
-                                                        <Typography mt={1}>
-                                                            {el.description}
-                                                        </Typography>
-                                                    </Box>
-                                                </Box>
-                                            </Box>
-                                            {/* https://v5-0-6.mui.com/pt/components/menus/ - LINK PARA MENU */}
-                                            <IconButton
-                                                sx={{
-                                                    backgroundColor: "#dbdbdb",
-                                                }}
-                                                id="basic-button"
-                                                aria-controls="basic-menu"
-                                                aria-haspopup="true"
-                                                aria-expanded={
-                                                    open ? "true" : undefined
-                                                }
-                                                onClick={handleClick}
-                                            >
-                                                <MoreHoriz
-                                                    sx={{ fill: "#707070" }}
-                                                />
-                                            </IconButton>
-                                            <Menu
-                                                id="basic-menu"
-                                                anchorEl={anchorEl}
-                                                open={open}
-                                                onClose={handleClose}
-                                                MenuListProps={{
-                                                    "aria-labelledby":
-                                                        "basic-button",
-                                                }}
-                                            >
-                                                <MenuItem onClick={handleClose}>
-                                                    Excluir
-                                                </MenuItem>
-                                            </Menu>
-                                        </CardContent>
-                                    </Card>
-                                );
+                                if (selectValue === "") {
+                                    return card(el, i)
+                                } else {
+                                    if (el.type === selectValue) {
+                                        return card(el, i)
+                                    }
+                                }
                             })}
                         </Box>
                     </Grid>
