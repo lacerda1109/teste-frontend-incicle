@@ -14,6 +14,15 @@ import {
     IconButton,
     Menu,
     Link,
+    Modal,
+    Fade,
+    Backdrop,
+    List,
+    ListItem,
+    ListItemAvatar,
+    Avatar,
+    ListItemText,
+    Divider
 } from "@material-ui/core";
 import { Add, MoreHoriz } from "@mui/icons-material";
 import Badge from "./components/Badge";
@@ -60,13 +69,13 @@ export default function AppBody() {
 
     function confirmations(arr) {
         let confirmed = arr.filter((e) => {
-            if (e.confirmed_presence == true) {
+            if (e.confirmed_presence === true) {
                 return e;
             }
         });
 
         let str = `${confirmed.length} ${
-            confirmed.length == 1 ? "CONFIRMAÇÃO" : "CONFIRMAÇÕES"
+            confirmed.length === 1 ? "CONFIRMAÇÃO" : "CONFIRMAÇÕES"
         } DE ${arr.length}`;
 
         return str;
@@ -74,7 +83,7 @@ export default function AppBody() {
 
     function card(el, i) {
         return (
-            <Card key={i}>
+            <Card key={i} sx={{ borderRadius: "0" }}>
                 <CardContent
                     sx={{
                         display: "flex",
@@ -87,7 +96,7 @@ export default function AppBody() {
                         sx={{
                             display: "flex",
                             gap: "16px",
-                            width: '100%',
+                            width: "100%",
                             "@media screen and (max-width: 700px)": {
                                 flexDirection: "column",
                             },
@@ -107,15 +116,15 @@ export default function AppBody() {
                                     margin: "auto",
                                 },
                                 "@media screen and (max-width: 400px)": {
-                                    width: '100%'
-                                }
+                                    width: "100%",
+                                },
                             }}
                         ></Box>
                         <Box
                             sx={{
                                 display: "flex",
                                 alignItems: "center",
-                                width: '100%',
+                                width: "100%",
                                 justifyContent: "space-between",
                                 gap: "10px",
                             }}
@@ -144,6 +153,11 @@ export default function AppBody() {
                                                 |{" "}
                                                 <Link
                                                     sx={{ cursor: "pointer" }}
+                                                    onClick={() =>
+                                                        openGuest(
+                                                            el.invited_people
+                                                        )
+                                                    }
                                                 >
                                                     {confirmations(
                                                         el.invited_people
@@ -190,8 +204,103 @@ export default function AppBody() {
         );
     }
 
+    // GUEST LIST MODAL -------------------------------------------------------------------------------------
+    const [guestModal, setGuestModal] = useState(false);
+    const [guestData, setGuestData] = useState("");
+    function openGuest(arr) {
+        setGuestData(arr);
+        setGuestModal(true);
+    }
+    function closeGuest() {
+        setGuestModal(false);
+    }
+
+    const guestModalStyle = {
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        width: 400,
+        backgroundColor: "#fff",
+        outline: 0,
+        padding: "16px",
+    };
+
+    function confirmBadge(param) {
+        let color
+        if (param === true) {
+            color = '#65c270'
+        } else { color = '#707070' }
+        return (
+            <Box
+                sx={{
+                    fontSize: '9px',
+                    color: '#fff',
+                    padding: '2px 3px',
+                    backgroundColor: color
+                }}
+            >
+                {param === true ? 'CONFIRMADO' : 'NÃO CONFIRMADO'}
+            </Box>
+        )
+    }
+
     return (
         <Box>
+            <Modal
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                open={guestModal}
+                onClose={closeGuest}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+                BackdropProps={{
+                    timeout: 500,
+                }}
+            >
+                <Fade in={guestModal}>
+                    <Box sx={{ ...guestModalStyle }}>
+                        <Typography
+                            id="transition-modal-title"
+                            variant="h4"
+                            component="h4"
+                            color="textPrimary"
+                        >
+                            Convidados
+                        </Typography>
+                        <List>
+                            {guestData.map((el, i, arr) => {
+                                return (
+                                    <Box key={i}>
+                                    <ListItem
+                                        sx={{padding: '8px 0'}}
+                                        secondaryAction={confirmBadge(el.confirmed_presence)}
+                                    >
+                                        <ListItemAvatar>
+                                            <Avatar
+                                                alt={el.name}
+                                                src={el.avatar}
+                                                sx={{
+                                                    width: "60px",
+                                                    height: "60px",
+                                                    marginRight: '15px'
+                                                }}
+                                            />
+                                        </ListItemAvatar>
+                                        <ListItemText
+                                            primary={el.name}
+                                            secondary={el.username}
+                                        />
+                                    </ListItem>
+                                    {i === (arr.length - 1) ? null : (<Divider variant="inset" component="li" />)}
+                                    </Box>
+                                );
+                            })}
+                        </List>
+                    </Box>
+                </Fade>
+            </Modal>
+
             <Container maxWidth="xl" sx={{ padding: "24px" }}>
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={8} lg={9}>
