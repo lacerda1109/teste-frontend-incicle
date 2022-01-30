@@ -12,7 +12,7 @@ const customTheme = createTheme({
     typography: {
         fontFamily: 'Open Sans',
         h2: {
-            fontSize: '3rem',
+            fontSize: '2.8rem',
             fontWeight: 300
         },
         h4: {

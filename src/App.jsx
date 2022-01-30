@@ -1,9 +1,10 @@
-import { ThemeProvider, Toolbar, Box } from '@material-ui/core';
+import { ThemeProvider, responsiveFontSizes, Toolbar, Box } from '@material-ui/core';
 import logo from './assets/image/logo.png'
 import AppBody from './AppBody'
 import customTheme from './theme/customTheme'
 
-const theme = customTheme
+let theme = customTheme
+theme = responsiveFontSizes(theme)
 
 function App() {
   return (

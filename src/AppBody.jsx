@@ -7,12 +7,14 @@ export default function AppBody() {
         <Box>
             <Container maxWidth="xl" sx={{padding: '24px'}}>
                 <Grid container spacing={2}>
-                    <Grid item xs={12} sm={8} lg={9}> {/* ESQUERDA */}
+                    <Grid item xs={12} md={8} lg={9}> {/* ESQUERDA */}
                         <Box
                             sx={{
                                 display: 'flex',
                                 justifyContent: 'space-between',
-                                alignItems: 'center'
+                                alignItems: 'center',
+                                flexWrap: 'wrap',
+                                gap: '20px'
                             }}
                         >
                             <Typography variant="h2" color="textPrimary">Endomarketing</Typography>
@@ -35,7 +37,7 @@ export default function AppBody() {
                             </Box>
                         </Box>
                     </Grid>
-                    <Grid item xs={12} sm={4} lg={3}> {/* DIREITA */}
+                    <Grid item xs={12} md={4} lg={3}> {/* DIREITA */}
                         <Box sx={{backgroundColor: '#FFF2DE', border: '1px solid #DCD1C0', padding: '30px 20px'}}>
                             <Typography variant="h4" color="textPrimary">Endomarketing</Typography>
                             <Typography color="textPrimary" sx={{margin: '15px 0'}}>Endomarketing está relacionado às
