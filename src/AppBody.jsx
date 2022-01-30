@@ -22,6 +22,7 @@ import {
 import { Add, Close } from "@mui/icons-material";
 import { data } from "./assets/data/data";
 import AppCard from './components/AppCard'
+import SideBox from './components/SideBox'
 
 export default function AppBody() {
     // SELECT -----------------------------------------------------------------------------------------------
@@ -242,6 +243,9 @@ export default function AppBody() {
                             <Button variant="outlined" color="dark">
                                 Dispensar
                             </Button>
+                        </Box>
+                        <Box sx={{marginTop: '20px'}}>
+                            <SideBox />
                         </Box>
                     </Grid>
                 </Grid>
