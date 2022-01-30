@@ -1,5 +1,3 @@
-import { Box } from "@material-ui/core"
-
 export default function Badge(props) {
     const style = {
         backgroundColor: props.color,
