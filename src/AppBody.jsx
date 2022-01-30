@@ -1,8 +1,18 @@
-import React from 'react'
-import { Box, Grid, Container, Typography, Button, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core'
-import { Add } from '@mui/icons-material';
+import React, { useState } from 'react'
+import { Box, Grid, Container, Typography, Button, FormControl, InputLabel, Select, MenuItem, Card, CardContent, IconButton, Menu } from '@material-ui/core'
+import { Add, MoreHoriz } from '@mui/icons-material';
+import Badge from './components/Badge';
 
 export default function AppBody() {
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
     return (
         <Box>
             <Container maxWidth="xl" sx={{padding: '24px'}}>
@@ -21,6 +31,7 @@ export default function AppBody() {
                             <Box sx={{ display: 'flex', gap: '15px' }}>
                                 <FormControl size="small" sx={{ minWidth: '120px' }}>
                                     <InputLabel>Tipo</InputLabel>
+                                    {/* https://v5-0-6.mui.com/pt/components/selects/ - LINK PARA SELEÇÃO */}
                                     <Select
                                         label="Tipo"
                                         sx={{backgroundColor: 'white'}}
@@ -35,6 +46,61 @@ export default function AppBody() {
                                 </FormControl>
                             <Button variant="contained" endIcon={<Add />}>Criar</Button>
                             </Box>
+                        </Box>
+                        {/* MAP */}
+                        <Box mt={2} sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                            <Card>
+                                <CardContent
+                                    sx={{
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                        padding: '16px !important'
+                                    }}
+                                >
+                                    <Box sx={{display: 'flex', gap: '16px'}}>
+                                        <Box
+                                            sx={{
+                                                backgroundColor: '#ccc',
+                                                width: '100px',
+                                                height: '100px'
+                                            }}
+                                        ></Box>
+                                        <Box>
+                                            <Typography variant="h4">Título do card</Typography>
+                                            <Box>
+                                                <Box sx={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                                                    <Badge text="COMUNICADO" color="#1976d2" />
+                                                    <Typography>13 DE OUT</Typography>
+                                                </Box>
+                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt...</p>
+                                            </Box>
+                                        </Box>
+                                    </Box>
+                                    {/* https://v5-0-6.mui.com/pt/components/menus/ - LINK PARA MENU */}
+                                    <IconButton
+                                        sx={{ backgroundColor: '#dbdbdb' }}
+                                        id="basic-button"
+                                        aria-controls="basic-menu"
+                                        aria-haspopup="true"
+                                        aria-expanded={open ? 'true' : undefined}
+                                        onClick={handleClick}
+                                    >
+                                        <MoreHoriz sx={{fill: '#707070'}} />
+                                    </IconButton>
+                                    <Menu
+                                        id="basic-menu"
+                                        anchorEl={anchorEl}
+                                        open={open}
+                                        onClose={handleClose}
+                                        MenuListProps={{
+                                        'aria-labelledby': 'basic-button',
+                                        }}
+                                    >
+                                        <MenuItem onClick={handleClose}>Excluir</MenuItem>
+                                    </Menu>
+                                </CardContent>
+                            </Card>
                         </Box>
                     </Grid>
                     <Grid item xs={12} md={4} lg={3}> {/* DIREITA */}
