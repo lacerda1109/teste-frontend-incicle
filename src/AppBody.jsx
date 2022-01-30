@@ -87,73 +87,104 @@ export default function AppBody() {
                         sx={{
                             display: "flex",
                             gap: "16px",
+                            width: '100%',
+                            "@media screen and (max-width: 700px)": {
+                                flexDirection: "column",
+                            },
                         }}
                     >
                         <Box
                             sx={{
-                                backgroundColor: "#ccc",
                                 width: "100px",
                                 height: "100px",
                                 backgroundImage: `url(${el.file.url})`,
                                 backgroundSize: "cover",
+                                backgroundPosition: "center",
+                                flexShrink: 0,
+                                "@media screen and (max-width: 700px)": {
+                                    width: "80%",
+                                    paddingTop: "50%",
+                                    margin: "auto",
+                                },
+                                "@media screen and (max-width: 400px)": {
+                                    width: '100%'
+                                }
                             }}
                         ></Box>
-                        <Box>
-                            <Typography variant="h4">{el.title}</Typography>
+                        <Box
+                            sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                width: '100%',
+                                justifyContent: "space-between",
+                                gap: "10px",
+                            }}
+                        >
                             <Box>
-                                <Box
-                                    sx={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                    }}
-                                >
-                                    {badgeType(el.type)}
-                                    {el.info.place ? (
-                                        <Typography>
-                                            {el.info.place} |{" "}
-                                        </Typography>
-                                    ) : null}
-                                    <Typography>{el.info.date}</Typography>
-                                    {el.type === "event" ? (
-                                        <Typography>
-                                            {" "}
-                                            |{" "}
-                                            <Link sx={{ cursor: "pointer" }}>
-                                                {confirmations(
-                                                    el.invited_people
-                                                )}
-                                            </Link>
-                                        </Typography>
-                                    ) : null}
+                                <Typography variant="h4">{el.title}</Typography>
+                                <Box>
+                                    <Box
+                                        mt={1}
+                                        sx={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            flexWrap: "wrap",
+                                        }}
+                                    >
+                                        {badgeType(el.type)}
+                                        {el.info.place ? (
+                                            <Typography>
+                                                {el.info.place} |{" "}
+                                            </Typography>
+                                        ) : null}
+                                        <Typography>{el.info.date}</Typography>
+                                        {el.type === "event" ? (
+                                            <Typography>
+                                                {" "}
+                                                |{" "}
+                                                <Link
+                                                    sx={{ cursor: "pointer" }}
+                                                >
+                                                    {confirmations(
+                                                        el.invited_people
+                                                    )}
+                                                </Link>
+                                            </Typography>
+                                        ) : null}
+                                    </Box>
+                                    <Typography mt={1}>
+                                        {el.description}
+                                    </Typography>
                                 </Box>
-                                <Typography mt={1}>{el.description}</Typography>
                             </Box>
+                            {/* https://v5-0-6.mui.com/pt/components/menus/ - LINK PARA MENU */}
+                            <IconButton
+                                sx={{
+                                    backgroundColor: "#dbdbdb",
+                                }}
+                                id="basic-button"
+                                aria-controls="basic-menu"
+                                aria-haspopup="true"
+                                aria-expanded={open ? "true" : undefined}
+                                onClick={handleClick}
+                            >
+                                <MoreHoriz sx={{ fill: "#707070" }} />
+                            </IconButton>
+                            <Menu
+                                id="basic-menu"
+                                anchorEl={anchorEl}
+                                open={open}
+                                onClose={handleClose}
+                                MenuListProps={{
+                                    "aria-labelledby": "basic-button",
+                                }}
+                            >
+                                <MenuItem onClick={handleClose}>
+                                    Excluir
+                                </MenuItem>
+                            </Menu>
                         </Box>
                     </Box>
-                    {/* https://v5-0-6.mui.com/pt/components/menus/ - LINK PARA MENU */}
-                    <IconButton
-                        sx={{
-                            backgroundColor: "#dbdbdb",
-                        }}
-                        id="basic-button"
-                        aria-controls="basic-menu"
-                        aria-haspopup="true"
-                        aria-expanded={open ? "true" : undefined}
-                        onClick={handleClick}
-                    >
-                        <MoreHoriz sx={{ fill: "#707070" }} />
-                    </IconButton>
-                    <Menu
-                        id="basic-menu"
-                        anchorEl={anchorEl}
-                        open={open}
-                        onClose={handleClose}
-                        MenuListProps={{
-                            "aria-labelledby": "basic-button",
-                        }}
-                    >
-                        <MenuItem onClick={handleClose}>Excluir</MenuItem>
-                    </Menu>
                 </CardContent>
             </Card>
         );
@@ -220,10 +251,10 @@ export default function AppBody() {
                         >
                             {data.map((el, i) => {
                                 if (selectValue === "") {
-                                    return card(el, i)
+                                    return card(el, i);
                                 } else {
                                     if (el.type === selectValue) {
-                                        return card(el, i)
+                                        return card(el, i);
                                     }
                                 }
                             })}
