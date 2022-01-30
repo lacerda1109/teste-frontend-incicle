@@ -20,11 +20,13 @@ import {
     Divider
 } from "@material-ui/core";
 import { Add, Close } from "@mui/icons-material";
-import { data } from "./assets/data/data";
+import data from "./assets/data/data.json";
 import AppCard from './components/AppCard'
 import SideBox from './components/SideBox'
 
 export default function AppBody() {
+    let content = data.data
+
     // SELECT -----------------------------------------------------------------------------------------------
     const [selectValue, setSelectValue] = useState("");
     function handleSelect(e) {
@@ -205,7 +207,7 @@ export default function AppBody() {
                                 gap: "10px",
                             }}
                         >
-                            {data.map((el, i) => {
+                            {content.map((el, i) => {
                                 if (selectValue === "") {
                                     return <AppCard el={el} i={i} openGuest={openGuest} />
                                 } else {

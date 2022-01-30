@@ -1,15 +1,14 @@
-import {
-    Box,
-    Typography,
-    MenuItem,
-    IconButton,
-} from "@material-ui/core";
+import { Box, Typography, MenuItem, IconButton } from "@material-ui/core";
 import { Public, MoreHoriz } from "@mui/icons-material";
+import management from "../assets/data/management.json";
 
-export default function SideBox(props) {
-    function row(el) {
+export default function SideBox() {
+    let data = management.data[0].boards;
+
+    function row(el, i) {
         return (
             <Box
+                key={i}
                 sx={{
                     backgroundColor: "rgba(66, 135, 245, 0.1)",
                     marginTop: "8px",
@@ -23,10 +22,8 @@ export default function SideBox(props) {
                         alignItems: "center",
                     }}
                 >
-                    <Typography color="textPrimary">
-                        Demonstrativo comercial
-                    </Typography>
-                    <Box sx={{ display: 'flex', gap: '5px' }}>
+                    <Typography color="textPrimary">{el.title}</Typography>
+                    <Box sx={{ display: "flex", gap: "5px" }}>
                         <Box
                             sx={{
                                 backgroundColor: "#fff",
@@ -49,7 +46,7 @@ export default function SideBox(props) {
                                 justifyContent: "center",
                                 alignItems: "center",
                                 padding: "3px",
-                                cursor: 'pointer'
+                                cursor: "pointer",
                             }}
                         >
                             <MoreHoriz
@@ -59,43 +56,22 @@ export default function SideBox(props) {
                     </Box>
                 </Box>
 
-                <Box sx={{display: 'flex', gap: '5px', marginTop: '5px'}}>
-                    <Box
-                        sx={{
-                            backgroundColor: '#ccc',
-                            width: '25%',
-                            paddingTop: '25%',
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center'
-                        }}
-                    ></Box>
-                    <Box
-                        sx={{
-                            backgroundColor: '#ccc',
-                            width: '25%',
-                            paddingTop: '25%',
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center'
-                        }}
-                    ></Box>
-                    <Box
-                        sx={{
-                            backgroundColor: '#ccc',
-                            width: '25%',
-                            paddingTop: '25%',
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center'
-                        }}
-                    ></Box>
-                    <Box
-                        sx={{
-                            backgroundColor: '#ccc',
-                            width: '25%',
-                            paddingTop: '25%',
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center'
-                        }}
-                    ></Box>
+                <Box sx={{ display: "flex", gap: "5px", marginTop: "5px" }}>
+                    {el.resume_files.map((el, i) => {
+                        return (
+                            <Box
+                                key={i}
+                                sx={{
+                                    backgroundColor: "#ccc",
+                                    width: "25%",
+                                    paddingTop: "25%",
+                                    backgroundImage: `url(${el.file})`,
+                                    backgroundSize: "cover",
+                                    backgroundPosition: "center",
+                                }}
+                            ></Box>
+                        );
+                    })}
                 </Box>
             </Box>
         );
@@ -114,7 +90,9 @@ export default function SideBox(props) {
                 Quadros de Gestão à Vista
             </Typography>
 
-            {row()}
+            {data.map((el, i) => {
+                return row(el, i);
+            })}
         </Box>
     );
 }
