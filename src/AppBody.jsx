@@ -24,7 +24,7 @@ import {
     ListItemText,
     Divider
 } from "@material-ui/core";
-import { Add, MoreHoriz } from "@mui/icons-material";
+import { Add, MoreHoriz, Close } from "@mui/icons-material";
 import Badge from "./components/Badge";
 import { data } from "./assets/data/data";
 
@@ -206,7 +206,7 @@ export default function AppBody() {
 
     // GUEST LIST MODAL -------------------------------------------------------------------------------------
     const [guestModal, setGuestModal] = useState(false);
-    const [guestData, setGuestData] = useState("");
+    const [guestData, setGuestData] = useState([]);
     function openGuest(arr) {
         setGuestData(arr);
         setGuestModal(true);
@@ -223,7 +223,16 @@ export default function AppBody() {
         width: 400,
         backgroundColor: "#fff",
         outline: 0,
-        padding: "16px",
+        overflow: 'hidden',
+        "@media screen and (max-width: 400px)": {
+            width: '100%',
+            height: '100%',
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            transform: 'translate(0,0)',
+            overflow: 'auto'
+        }
     };
 
     function confirmBadge(param) {
@@ -260,15 +269,26 @@ export default function AppBody() {
             >
                 <Fade in={guestModal}>
                     <Box sx={{ ...guestModalStyle }}>
-                        <Typography
-                            id="transition-modal-title"
-                            variant="h4"
-                            component="h4"
-                            color="textPrimary"
+                        <Box
+                            sx={{
+                                padding: '16px',
+                                boxShadow: "2px 0 10px 0 #ccc",
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center'
+                            }}
                         >
-                            Convidados
-                        </Typography>
-                        <List>
+                            <Typography
+                                id="transition-modal-title"
+                                variant="h4"
+                                component="h4"
+                                color="textPrimary"
+                            >
+                                Convidados
+                            </Typography>
+                            <Close sx={{cursor: 'pointer', fill: '#707070'}} onClick={() => closeGuest()} />
+                        </Box>
+                        <List sx={{padding: '16px'}}>
                             {guestData.map((el, i, arr) => {
                                 return (
                                     <Box key={i}>
