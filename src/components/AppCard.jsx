@@ -61,7 +61,7 @@ export default function AppCard({ el, i, openGuest }) {
 
     return (
         <>
-            <Card key={i} sx={{ borderRadius: "0" }}>
+            <Card key={i} sx={{ borderRadius: "0", boxShadow: "2px 0 10px 0 #ccc" }}>
                 <CardContent
                     sx={{
                         display: "flex",
