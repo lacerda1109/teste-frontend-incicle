@@ -1,9 +1,24 @@
 import { createTheme } from "@material-ui/core"
-import { teal, lime } from '@material-ui/core/colors'
 
 const customTheme = createTheme({
+    palette: {
+        dark: {
+            main: '#707070'
+        },
+        text: {
+            primary: '#707070',
+        }
+    },
     typography: {
-        fontFamily: 'Open Sans'
+        fontFamily: 'Open Sans',
+        h2: {
+            fontSize: '3rem',
+            fontWeight: 300
+        },
+        h4: {
+            fontSize: '1.3rem',
+            fontWeight: 700
+        }
     }
 })
 
