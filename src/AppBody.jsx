@@ -88,17 +88,14 @@ export default function AppBody() {
     }
 
     // SELECT -----------------------------------------------------------------------------------------------
-    const [type, setType] = useState([]);
+    const [selectType, setSelectType] = useState([]);
     function handleSelectCheck(e) {
-        setType(
+        setSelectType(
             typeof e.target.value === "string"
                 ? e.target.value.split(",")
                 : e.target.value
         );
     }
-    useEffect(() => {
-        console.log(type);
-    }, [type]);
 
     return (
         <Box>
@@ -204,34 +201,48 @@ export default function AppBody() {
                                     <Select
                                         sx={{ backgroundColor: "white" }}
                                         multiple
-                                        value={type}
+                                        value={selectType}
                                         onChange={handleSelectCheck}
                                         input={<OutlinedInput label="Tag" />}
-                                        renderValue={(selected) =>
-                                            selected.join(", ")
+                                        renderValue={(selected) => {
+                                                return selected.map((value) => {
+                                                    switch (value) {
+                                                        case 'event':
+                                                            value = 'Evento'
+                                                            break;
+                                                        case 'release':
+                                                            value = 'Comunicado'
+                                                            break;
+                                                        case 'publication':
+                                                            value = 'Publicação'
+                                                            break;
+                                                    }
+                                                    return value
+                                                }).join(", ")
+                                            }
                                         }
                                     >
-                                        <MenuItem value="Comunicado">
+                                        <MenuItem value="release">
                                             <Checkbox
                                                 checked={
-                                                    type.indexOf("Comunicado") >
+                                                    selectType.indexOf("release") >
                                                     -1
                                                 }
                                             />
                                             <ListItemText primary="Comunicado" />
                                         </MenuItem>
-                                        <MenuItem value="Evento">
+                                        <MenuItem value="event">
                                             <Checkbox
                                                 checked={
-                                                    type.indexOf("Evento") > -1
+                                                    selectType.indexOf("event") > -1
                                                 }
                                             />
                                             <ListItemText primary="Evento" />
                                         </MenuItem>
-                                        <MenuItem value="Publicação">
+                                        <MenuItem value="publication">
                                             <Checkbox
                                                 checked={
-                                                    type.indexOf("Publicação") >
+                                                    selectType.indexOf("publication") >
                                                     -1
                                                 }
                                             />
@@ -253,7 +264,7 @@ export default function AppBody() {
                             }}
                         >
                             {content.map((el, i) => {
-                                if (selectValue === "") {
+                                if (selectType.length === 0) {
                                     return (
                                         <AppCard
                                             key={i}
@@ -262,7 +273,7 @@ export default function AppBody() {
                                         />
                                     );
                                 } else {
-                                    if (el.type === selectValue) {
+                                    if (selectType.includes(el.type)) {
                                         return (
                                             <AppCard
                                                 key={i}
