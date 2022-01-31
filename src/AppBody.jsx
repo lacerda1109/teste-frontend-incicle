@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Box,
     Grid,
@@ -17,22 +17,24 @@ import {
     ListItemAvatar,
     Avatar,
     ListItemText,
-    Divider
+    Divider,
+    OutlinedInput,
+    Checkbox,
 } from "@material-ui/core";
 import { Add, Close } from "@mui/icons-material";
 import data from "./assets/data/data.json";
-import AppCard from './components/AppCard'
-import SideBox from './components/SideBox'
+import AppCard from "./components/AppCard";
+import SideBox from "./components/SideBox";
 
 export default function AppBody() {
-    let content = data.data
+    let content = data.data;
 
     // SELECT -----------------------------------------------------------------------------------------------
     const [selectValue, setSelectValue] = useState("");
     function handleSelect(e) {
         setSelectValue(e.target.value);
     }
-    
+
     // GUEST LIST MODAL -------------------------------------------------------------------------------------
     const [guestModal, setGuestModal] = useState(false);
     const [guestData, setGuestData] = useState([]);
@@ -52,36 +54,51 @@ export default function AppBody() {
         width: 400,
         backgroundColor: "#fff",
         outline: 0,
-        overflow: 'hidden',
+        overflow: "hidden",
         "@media screen and (max-width: 400px)": {
-            width: '100%',
-            height: '100%',
-            position: 'fixed',
+            width: "100%",
+            height: "100%",
+            position: "fixed",
             top: 0,
             left: 0,
-            transform: 'translate(0,0)',
-            overflow: 'auto'
-        }
+            transform: "translate(0,0)",
+            overflow: "auto",
+        },
     };
 
     function confirmBadge(param) {
-        let color
+        let color;
         if (param === true) {
-            color = '#65c270'
-        } else { color = '#707070' }
+            color = "#65c270";
+        } else {
+            color = "#707070";
+        }
         return (
             <Box
                 sx={{
-                    fontSize: '9px',
-                    color: '#fff',
-                    padding: '2px 3px',
-                    backgroundColor: color
+                    fontSize: "9px",
+                    color: "#fff",
+                    padding: "2px 3px",
+                    backgroundColor: color,
                 }}
             >
-                {param === true ? 'CONFIRMADO' : 'NÃO CONFIRMADO'}
+                {param === true ? "CONFIRMADO" : "NÃO CONFIRMADO"}
             </Box>
-        )
+        );
     }
+
+    // SELECT -----------------------------------------------------------------------------------------------
+    const [type, setType] = useState([]);
+    function handleSelectCheck(e) {
+        setType(
+            typeof e.target.value === "string"
+                ? e.target.value.split(",")
+                : e.target.value
+        );
+    }
+    useEffect(() => {
+        console.log(type);
+    }, [type]);
 
     return (
         <Box>
@@ -100,11 +117,11 @@ export default function AppBody() {
                     <Box sx={{ ...guestModalStyle }}>
                         <Box
                             sx={{
-                                padding: '16px',
+                                padding: "16px",
                                 boxShadow: "2px 0 10px 0 #ccc",
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'center'
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
                             }}
                         >
                             <Typography
@@ -115,33 +132,43 @@ export default function AppBody() {
                             >
                                 Convidados
                             </Typography>
-                            <Close sx={{cursor: 'pointer', fill: '#707070'}} onClick={() => closeGuest()} />
+                            <Close
+                                sx={{ cursor: "pointer", fill: "#707070" }}
+                                onClick={() => closeGuest()}
+                            />
                         </Box>
-                        <List sx={{padding: '16px'}}>
+                        <List sx={{ padding: "16px" }}>
                             {guestData.map((el, i, arr) => {
                                 return (
                                     <Box key={i}>
-                                    <ListItem
-                                        sx={{padding: '8px 0'}}
-                                        secondaryAction={confirmBadge(el.confirmed_presence)}
-                                    >
-                                        <ListItemAvatar>
-                                            <Avatar
-                                                alt={el.name}
-                                                src={el.avatar}
-                                                sx={{
-                                                    width: "60px",
-                                                    height: "60px",
-                                                    marginRight: '15px'
-                                                }}
+                                        <ListItem
+                                            sx={{ padding: "8px 0" }}
+                                            secondaryAction={confirmBadge(
+                                                el.confirmed_presence
+                                            )}
+                                        >
+                                            <ListItemAvatar>
+                                                <Avatar
+                                                    alt={el.name}
+                                                    src={el.avatar}
+                                                    sx={{
+                                                        width: "60px",
+                                                        height: "60px",
+                                                        marginRight: "15px",
+                                                    }}
+                                                />
+                                            </ListItemAvatar>
+                                            <ListItemText
+                                                primary={el.name}
+                                                secondary={el.username}
                                             />
-                                        </ListItemAvatar>
-                                        <ListItemText
-                                            primary={el.name}
-                                            secondary={el.username}
-                                        />
-                                    </ListItem>
-                                    {i === (arr.length - 1) ? null : (<Divider variant="inset" component="li" />)}
+                                        </ListItem>
+                                        {i === arr.length - 1 ? null : (
+                                            <Divider
+                                                variant="inset"
+                                                component="li"
+                                            />
+                                        )}
                                     </Box>
                                 );
                             })}
@@ -150,6 +177,7 @@ export default function AppBody() {
                 </Fade>
             </Modal>
 
+            {/* CORPO ----------------------------------------------------------------------------------------------------------------- */}
             <Container maxWidth="xl" sx={{ padding: "24px" }}>
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={8} lg={9}>
@@ -173,24 +201,41 @@ export default function AppBody() {
                                     sx={{ minWidth: "120px" }}
                                 >
                                     <InputLabel>Tipo</InputLabel>
-                                    {/* https://v5-0-6.mui.com/pt/components/selects/ - LINK PARA SELEÇÃO */}
                                     <Select
-                                        label="Tipo"
                                         sx={{ backgroundColor: "white" }}
-                                        value={selectValue}
-                                        onChange={handleSelect}
+                                        multiple
+                                        value={type}
+                                        onChange={handleSelectCheck}
+                                        input={<OutlinedInput label="Tag" />}
+                                        renderValue={(selected) =>
+                                            selected.join(", ")
+                                        }
                                     >
-                                        <MenuItem value="">
-                                            <em>Nenhum</em>
+                                        <MenuItem value="Comunicado">
+                                            <Checkbox
+                                                checked={
+                                                    type.indexOf("Comunicado") >
+                                                    -1
+                                                }
+                                            />
+                                            <ListItemText primary="Comunicado" />
                                         </MenuItem>
-                                        <MenuItem value="release">
-                                            Comunicado
+                                        <MenuItem value="Evento">
+                                            <Checkbox
+                                                checked={
+                                                    type.indexOf("Evento") > -1
+                                                }
+                                            />
+                                            <ListItemText primary="Evento" />
                                         </MenuItem>
-                                        <MenuItem value="event">
-                                            Evento
-                                        </MenuItem>
-                                        <MenuItem value="publication">
-                                            Publicação
+                                        <MenuItem value="Publicação">
+                                            <Checkbox
+                                                checked={
+                                                    type.indexOf("Publicação") >
+                                                    -1
+                                                }
+                                            />
+                                            <ListItemText primary="Publicação" />
                                         </MenuItem>
                                     </Select>
                                 </FormControl>
@@ -209,10 +254,22 @@ export default function AppBody() {
                         >
                             {content.map((el, i) => {
                                 if (selectValue === "") {
-                                    return <AppCard el={el} i={i} openGuest={openGuest} />
+                                    return (
+                                        <AppCard
+                                            key={i}
+                                            el={el}
+                                            openGuest={openGuest}
+                                        />
+                                    );
                                 } else {
                                     if (el.type === selectValue) {
-                                        return <AppCard el={el} i={i} openGuest={openGuest} />
+                                        return (
+                                            <AppCard
+                                                key={i}
+                                                el={el}
+                                                openGuest={openGuest}
+                                            />
+                                        );
                                     }
                                 }
                             })}
@@ -246,7 +303,7 @@ export default function AppBody() {
                                 Dispensar
                             </Button>
                         </Box>
-                        <Box sx={{marginTop: '20px'}}>
+                        <Box sx={{ marginTop: "20px" }}>
                             <SideBox />
                         </Box>
                     </Grid>

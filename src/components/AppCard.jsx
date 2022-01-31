@@ -12,7 +12,7 @@ import {
 import { MoreHoriz } from "@mui/icons-material";
 import Badge from "./Badge";
 
-export default function AppCard({ el, i, openGuest }) {
+export default function AppCard({ el, openGuest }) {
     // DELETE MENU ------------------------------------------------------------------------------------------
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
@@ -61,7 +61,7 @@ export default function AppCard({ el, i, openGuest }) {
 
     return (
         <>
-            <Card key={i} sx={{ borderRadius: "0", boxShadow: "2px 0 10px 0 #ccc" }}>
+            <Card sx={{ borderRadius: "0", boxShadow: "2px 0 10px 0 #ccc" }}>
                 <CardContent
                     sx={{
                         display: "flex",
