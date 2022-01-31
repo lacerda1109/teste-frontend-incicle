@@ -12,7 +12,7 @@ import {
 import { MoreHoriz } from "@mui/icons-material";
 import Badge from "./Badge";
 
-export default function AppCard({ el, openGuest }) {
+export default function AppCard({ el, openGuest, deleteItem }) {
     // DELETE MENU ------------------------------------------------------------------------------------------
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
@@ -20,6 +20,7 @@ export default function AppCard({ el, openGuest }) {
         setAnchorEl(event.currentTarget);
     };
     const handleClose = () => {
+        deleteItem(el.id)
         setAnchorEl(null);
     };
     

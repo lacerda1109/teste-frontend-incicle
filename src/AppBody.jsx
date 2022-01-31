@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
     Box,
     Grid,
@@ -28,12 +28,6 @@ import SideBox from "./components/SideBox";
 
 export default function AppBody() {
     let content = data.data;
-
-    // SELECT -----------------------------------------------------------------------------------------------
-    const [selectValue, setSelectValue] = useState("");
-    function handleSelect(e) {
-        setSelectValue(e.target.value);
-    }
 
     // GUEST LIST MODAL -------------------------------------------------------------------------------------
     const [guestModal, setGuestModal] = useState(false);
@@ -95,6 +89,12 @@ export default function AppBody() {
                 ? e.target.value.split(",")
                 : e.target.value
         );
+    }
+
+    // DELETE CARD ------------------------------------------------------------------------------------------
+    let [deletedIndex, setDeletedIndex] = useState([])
+    function deleteItem(id) {
+        setDeletedIndex([...deletedIndex, id])
     }
 
     return (
@@ -264,23 +264,27 @@ export default function AppBody() {
                             }}
                         >
                             {content.map((el, i) => {
-                                if (selectType.length === 0) {
-                                    return (
-                                        <AppCard
-                                            key={i}
-                                            el={el}
-                                            openGuest={openGuest}
-                                        />
-                                    );
-                                } else {
-                                    if (selectType.includes(el.type)) {
+                                if (!deletedIndex.includes(el.id)) {
+                                    if (selectType.length === 0) {
                                         return (
                                             <AppCard
                                                 key={i}
                                                 el={el}
                                                 openGuest={openGuest}
+                                                deleteItem={deleteItem}
                                             />
                                         );
+                                    } else {
+                                        if (selectType.includes(el.type)) {
+                                            return (
+                                                <AppCard
+                                                    key={i}
+                                                    el={el}
+                                                    openGuest={openGuest}
+                                                    deleteItem={deleteItem}
+                                                />
+                                            );
+                                        }
                                     }
                                 }
                             })}
