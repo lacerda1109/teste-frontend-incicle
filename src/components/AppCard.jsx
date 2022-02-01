@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     Box,
     Typography,
@@ -14,7 +14,7 @@ import Badge from "./Badge";
 
 export default function AppCard({ el, openGuest, deleteItem }) {
     // DELETE MENU ------------------------------------------------------------------------------------------
-    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);

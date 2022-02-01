@@ -1,9 +1,33 @@
-import { Box, Typography, MenuItem, IconButton } from "@material-ui/core";
+import React, { useState, useEffect } from "react";
+import { Box, Typography, Menu, MenuItem, IconButton } from "@material-ui/core";
 import { Public, MoreHoriz } from "@mui/icons-material";
 import management from "../assets/data/management.json";
 
 export default function SideBox() {
     let data = management.data[0].boards;
+
+    // DELETE MENU ------------------------------------------------------------------------------------------
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    let [deletedIndex, setDeletedIndex] = useState([]);
+    function deleteItem(id) {
+        setDeletedIndex([...deletedIndex, id]);
+    }
+
+    useEffect(() => {
+        console.log(deletedIndex)
+    }, [deletedIndex])
+
+    function test(param) {
+        console.log(param)
+    }
 
     function row(el, i) {
         return (
@@ -38,21 +62,31 @@ export default function SideBox() {
                                 sx={{ fill: "#707070", fontSize: "20px" }}
                             />
                         </Box>
-                        <Box
+                        <IconButton
                             sx={{
                                 backgroundColor: "#fff",
-                                borderRadius: "100%",
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                padding: "3px",
-                                cursor: "pointer",
+                                width: "27px",
+                                height: "27px",
+                            }}
+                            id="basic-button"
+                            aria-controls="basic-menu"
+                            aria-haspopup="true"
+                            aria-expanded={open ? "true" : undefined}
+                            onClick={handleClick}
+                        >
+                            <MoreHoriz sx={{ fill: "#707070" }} />
+                        </IconButton>
+                        <Menu
+                            id="basic-menu"
+                            anchorEl={anchorEl}
+                            open={open}
+                            onClose={handleClose}
+                            MenuListProps={{
+                                "aria-labelledby": "basic-button",
                             }}
                         >
-                            <MoreHoriz
-                                sx={{ fill: "#707070", fontSize: "20px" }}
-                            />
-                        </Box>
+                            <MenuItem onClick={handleClose}>Excluir</MenuItem>
+                        </Menu>
                     </Box>
                 </Box>
 
@@ -91,7 +125,9 @@ export default function SideBox() {
             </Typography>
 
             {data.map((el, i) => {
-                return row(el, i);
+                // if (!deletedIndex.includes(el.title)) {
+                    return row(el, i);
+                // }
             })}
         </Box>
     );
