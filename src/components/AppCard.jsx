@@ -20,7 +20,6 @@ export default function AppCard({ el, openGuest, deleteItem }) {
         setAnchorEl(event.currentTarget);
     };
     const handleClose = () => {
-        deleteItem(el.id)
         setAnchorEl(null);
     };
     
@@ -171,7 +170,11 @@ export default function AppCard({ el, openGuest, deleteItem }) {
                                     "aria-labelledby": "basic-button",
                                 }}
                             >
-                                <MenuItem onClick={handleClose}>
+                                <MenuItem onClick={() => {
+                                        handleClose()
+                                        deleteItem(el.id)
+                                    }
+                                }>
                                     Excluir
                                 </MenuItem>
                             </Menu>
