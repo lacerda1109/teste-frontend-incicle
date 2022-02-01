@@ -23,11 +23,16 @@ import {
 } from "@material-ui/core";
 import { Add, Close } from "@mui/icons-material";
 import data from "./assets/data/data.json";
+import management from "./assets/data/management.json";
 import AppCard from "./components/AppCard";
-import SideBox from "./components/SideBox";
+import SideBoxCard from "./components/SideBoxCard";
 
 export default function AppBody() {
+    // dados da lista principal
     let content = data.data;
+
+    // dados da lista lateral
+    let sideContent = management.data[0].boards;
 
     // GUEST LIST MODAL -------------------------------------------------------------------------------------
     const [guestModal, setGuestModal] = useState(false);
@@ -92,9 +97,15 @@ export default function AppBody() {
     }
 
     // DELETE CARD ------------------------------------------------------------------------------------------
-    let [deletedIndex, setDeletedIndex] = useState([])
+    let [deletedIndex, setDeletedIndex] = useState([]);
     function deleteItem(id) {
-        setDeletedIndex([...deletedIndex, id])
+        setDeletedIndex([...deletedIndex, id]);
+    }
+
+    // DELETE SIDEBOX ITEM ----------------------------------------------------------------------------------
+    let [deletedSideBoxIndex, setDeletedSideBoxIndex] = useState([]);
+    function deleteSideBoxItem(id) {
+        setDeletedSideBoxIndex([...deletedSideBoxIndex, id]);
     }
 
     return (
@@ -205,28 +216,32 @@ export default function AppBody() {
                                         onChange={handleSelectCheck}
                                         input={<OutlinedInput label="Tag" />}
                                         renderValue={(selected) => {
-                                                return selected.map((value) => {
+                                            return selected
+                                                .map((value) => {
                                                     switch (value) {
-                                                        case 'event':
-                                                            value = 'Evento'
+                                                        case "event":
+                                                            value = "Evento";
                                                             break;
-                                                        case 'release':
-                                                            value = 'Comunicado'
+                                                        case "release":
+                                                            value =
+                                                                "Comunicado";
                                                             break;
-                                                        case 'publication':
-                                                            value = 'Publicação'
+                                                        case "publication":
+                                                            value =
+                                                                "Publicação";
                                                             break;
                                                     }
-                                                    return value
-                                                }).join(", ")
-                                            }
-                                        }
+                                                    return value;
+                                                })
+                                                .join(", ");
+                                        }}
                                     >
                                         <MenuItem value="release">
                                             <Checkbox
                                                 checked={
-                                                    selectType.indexOf("release") >
-                                                    -1
+                                                    selectType.indexOf(
+                                                        "release"
+                                                    ) > -1
                                                 }
                                             />
                                             <ListItemText primary="Comunicado" />
@@ -234,7 +249,9 @@ export default function AppBody() {
                                         <MenuItem value="event">
                                             <Checkbox
                                                 checked={
-                                                    selectType.indexOf("event") > -1
+                                                    selectType.indexOf(
+                                                        "event"
+                                                    ) > -1
                                                 }
                                             />
                                             <ListItemText primary="Evento" />
@@ -242,8 +259,9 @@ export default function AppBody() {
                                         <MenuItem value="publication">
                                             <Checkbox
                                                 checked={
-                                                    selectType.indexOf("publication") >
-                                                    -1
+                                                    selectType.indexOf(
+                                                        "publication"
+                                                    ) > -1
                                                 }
                                             />
                                             <ListItemText primary="Publicação" />
@@ -319,7 +337,23 @@ export default function AppBody() {
                             </Button>
                         </Box>
                         <Box sx={{ marginTop: "20px" }}>
-                            <SideBox />
+                            <Box
+                                sx={{
+                                    backgroundColor: "#fff",
+                                    boxShadow: "2px 0 10px 0 #ccc",
+                                    borderRadius: "4px",
+                                    padding: "12px 8px",
+                                }}
+                            >
+                                <Typography variant="h4" color="textPrimary">
+                                    Quadros de Gestão à Vista
+                                </Typography>
+                                {sideContent.map((el, i) => {
+                                    if (!deletedSideBoxIndex.includes(el.title)) {
+                                        return <SideBoxCard key={i} el={el} del={deleteSideBoxItem} />;
+                                    }
+                                })}
+                            </Box>
                         </Box>
                     </Grid>
                 </Grid>
